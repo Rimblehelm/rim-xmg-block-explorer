@@ -59,19 +59,6 @@ jobs:
         env:
           CI: true
 
-      - name: Debug coverage files
-        run: |
-          echo 'Listing coverage directory (if any):'
-          ls -la coverage || true
-          echo 'Finding coverage files:'
-          find coverage -maxdepth 3 -type f -print || true
-          if [ -f coverage/lcov.info ]; then
-            echo '--- lcov head ---'
-            head -n 200 coverage/lcov.info
-          else
-            echo 'lcov.info not found'
-          fi
-
       - name: Convert coverage-final.json to LCOV
         run: |
           if [ -f coverage/coverage-final.json ] && [ ! -f coverage/lcov.info ]; then

@@ -59,6 +59,22 @@ Notes:
 
 ## Learn More
 
+## Coverage & Coveralls
+
+- **Converter:** CI uses Vitest with the V8 coverage provider which produces `coverage/coverage-final.json` and HTML reports. To upload to Coveralls we convert the V8 JSON to LCOV using `scripts/coverage-to-lcov.js` in CI. This avoids adding providers with conflicting peer dependencies and keeps `npm ci` stable.
+- **Upload locally:** After running tests with coverage, you can upload the generated LCOV to Coveralls locally:
+
+```powershell
+# generate coverage locally
+npx vitest --run --coverage
+# convert (if needed)
+node scripts/coverage-to-lcov.js coverage/coverage-final.json coverage/lcov.info
+# upload
+npm run upload-coverage
+```
+
+The CI workflow already runs the converter and uploads `coverage/lcov.info` with the Coveralls GitHub Action.
+
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.

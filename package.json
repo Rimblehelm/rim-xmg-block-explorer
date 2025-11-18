@@ -7,7 +7,8 @@
     "e2e": "playwright test",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "upload-coverage": "cat coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "@rimblehelm/rim-xmg-lib": "^0.0.1",
@@ -20,20 +21,20 @@
   },
   "devDependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
+    "@playwright/test": "^1.40.0",
     "@prisma/client": "^6.19.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.0.10",
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv": "^17.2.3",
     "eslint": "^9",
-    "@playwright/test": "^1.40.0",
     "eslint-config-next": "16.0.3",
     "prisma": "^6.19.0",
-    "vitest": "^4.0.10",
-    "@vitest/coverage-v8": "^4.0.10",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.10"
   }
 }
