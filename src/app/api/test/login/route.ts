@@ -2,8 +2,14 @@ import prisma from "../../../../lib/prisma";
 import crypto from "crypto";
 
 export async function POST(req: Request) {
-  // Only allow in development or test environments
-  if (process.env.NODE_ENV === "production") {
+  // Only allow in development or test environments, or when explicitly enabled in CI
+  // by setting `ALLOW_TEST_ENDPOINT=1` in the environment.
+  // Allow the endpoint in non-production, when explicitly enabled, or when running in GitHub Actions.
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.ALLOW_TEST_ENDPOINT !== "1" &&
+    process.env.GITHUB_ACTIONS !== "true"
+  ) {
     return new Response(JSON.stringify({ error: "Not available" }), { status: 404 });
   }
 
