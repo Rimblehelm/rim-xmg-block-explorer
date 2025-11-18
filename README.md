@@ -1,4 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/Rimblehelm/rim-xmg-block-explorer/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/Rimblehelm/rim-xmg-block-explorer?branch=master)
+[![CI - Coveralls](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/coveralls.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/coveralls.yml)
 [![CI - Unit Tests](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-unit.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-unit.yml)
 [![CI - E2E](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-e2e.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-e2e.yml)
 [![CI - Publish](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/npm-publish.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/npm-publish.yml)
