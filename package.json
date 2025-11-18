@@ -32,6 +32,7 @@
     "eslint-config-next": "16.0.3",
     "prisma": "^6.19.0",
     "vitest": "^4.0.10",
+    "@vitest/coverage-v8": "^0.6.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
