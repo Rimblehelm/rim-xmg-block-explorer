@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXTAUTH_URL: http://localhost:3000
+      ALLOW_TEST_ENDPOINT: '1'
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     services:
       postgres:
