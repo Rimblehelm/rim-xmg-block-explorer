@@ -8,4 +8,9 @@ export default defineConfig({
 		// Run in Node environment for API/unit tests.
 		environment: 'node',
 	},
+	coverage: {
+		provider: 'v8',
+		reporter: ['text', 'lcov'],
+		reportsDirectory: 'coverage',
+	},
 })
