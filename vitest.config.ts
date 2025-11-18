@@ -9,7 +9,7 @@ export default defineConfig({
 		environment: 'node',
 	},
 	coverage: {
-		provider: 'v8',
+		provider: 'c8',
 		reporter: ['text', 'lcov'],
 		reportsDirectory: 'coverage',
 	},
