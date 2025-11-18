@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
 	request: NextRequest,
-	context: { params: { id: string | string[] } }
+	context: { params: Promise<{ id: string[] }> }
 ) {
-	const { id } = context.params;
+	const { id } = await context.params;
 
 	// For a catch-all route `[...id]`, Next provides `id` as string[] when
 	// multiple segments are present. Normalize to a string for responses.

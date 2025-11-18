@@ -1,11 +1,12 @@
 import React from "react";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/authOptions";
+import type { Session } from "next-auth";
 import prisma from "../../../lib/prisma";
 import AdminUserList from "../../../components/AdminUserList";
 
 export default async function Page() {
-  const session = await getServerSession(authOptions as any);
+  const session = (await getServerSession(authOptions as any)) as Session | null;
   if (!session || !session.user || !session.user.email) {
     return <div className="p-4">Unauthorized</div>;
   }
@@ -21,7 +22,6 @@ export default async function Page() {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Admin: Manage Users</h1>
-      {/* @ts-expect-error Server -> Client prop */}
       <AdminUserList initial={users} currentUserId={currentUserId} />
     </div>
   );

@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
 	request: NextRequest,
-	context: { params: Promise<{ id: string }> }
+	context: { params: Promise<{ id: string[] }> }
 ) {
-	const params = await context.params;
-	const id = params.id;
+	const { id } = await context.params;
 
-	return new NextResponse(id, { status: 200 });
+	const normalized = Array.isArray(id) ? id.join("/") : id;
+
+	return new NextResponse(normalized, { status: 200 });
 }

@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
 	request: NextRequest,
-	context: { params: Promise<{ address: string }> }
+	context: { params: Promise<{ address: string[] }> }
 ) {
-	const params = await context.params;
-	const address = params.address;
+	const { address } = await context.params;
 
-	return new NextResponse(address, { status: 200 });
+	const normalized = Array.isArray(address) ? address.join("/") : address;
+
+	return new NextResponse(normalized, { status: 200 });
 }
