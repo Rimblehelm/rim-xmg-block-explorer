@@ -24,7 +24,7 @@
     "@playwright/test": "^1.40.0",
     "@prisma/client": "^6.19.0",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^4.0.10",
