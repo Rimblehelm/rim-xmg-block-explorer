@@ -1,3 +1,13 @@
+[![Coverage Status](https://coveralls.io/repos/github/Rimblehelm/rim-xmg-block-explorer/badge.svg?branch=master&style=flat-square)](https://coveralls.io/github/Rimblehelm/rim-xmg-block-explorer?branch=master)
+[![CI - Unit Tests](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-unit.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-unit.yml)
+[![CI - E2E](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-e2e.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/ci-e2e.yml)
+[![CI - Publish](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/npm-publish.yml/badge.svg?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/actions/workflows/npm-publish.yml)
+[![Node.js](https://img.shields.io/badge/node-20-brightgreen?logo=node.js&style=flat-square)](https://nodejs.org/)
+[![License](https://img.shields.io/github/license/Rimblehelm/rim-xmg-block-explorer?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/blob/master/LICENSE)
+[![npm version](https://img.shields.io/npm/v/rim-xmg-block-explorer?style=flat-square)](https://www.npmjs.com/package/rim-xmg-block-explorer)
+[![Known Vulnerabilities](https://img.shields.io/github/vulnerabilities/Rimblehelm/rim-xmg-block-explorer?style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/security/advisories)
+[![Dependabot Status](https://img.shields.io/github/dependabot/Rimblehelm/rim-xmg-block-explorer?label=dependabot&logo=dependabot&style=flat-square)](https://github.com/Rimblehelm/rim-xmg-block-explorer/security/dependabot)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

@@ -8,6 +8,7 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     env:
+      COVERAGE_THRESHOLD: 95
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     services:
       postgres:
@@ -53,7 +54,62 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Run unit tests (Vitest)
-        run: npx vitest --run
+      - name: Run unit tests (Vitest) with coverage
+        run: npx vitest --run --coverage
         env:
           CI: true
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+
+      - name: Compute coverage percentage and add job summary
+        if: always()
+        run: |
+          set -euo pipefail
+          LCOV=coverage/lcov.info
+          if [ ! -f "$LCOV" ]; then
+            echo "No lcov.info found at $LCOV"
+            echo "Coverage: 0%" >> $GITHUB_STEP_SUMMARY || true
+            exit 0
+          fi
+          # Sum Lines Found (LF) and Lines Hit (LH) across all records
+          LF_TOTAL=$(grep -E '^LF:' "$LCOV" | cut -d: -f2 | awk '{s+=$1} END {print s+0}')
+          LH_TOTAL=$(grep -E '^LH:' "$LCOV" | cut -d: -f2 | awk '{s+=$1} END {print s+0}')
+          if [ "$LF_TOTAL" -eq 0 ]; then
+            PCT=0
+          else
+            PCT=$(awk "BEGIN {printf \"%.2f\", ($LH_TOTAL / $LF_TOTAL) * 100}")
+          fi
+          echo "Lines: $LH_TOTAL/$LF_TOTAL" >> $GITHUB_STEP_SUMMARY || true
+          echo "Coverage: $PCT%" >> $GITHUB_STEP_SUMMARY || true
+          echo "COVERAGE_PERCENTAGE=$PCT" >> $GITHUB_ENV || true
+
+      - name: Fail job if coverage below threshold
+        if: always()
+        run: |
+          set -euo pipefail
+          THRESH=${COVERAGE_THRESHOLD:-0}
+          # default to empty if not set
+          PCT=${COVERAGE_PERCENTAGE:-}
+          if [ -z "$PCT" ]; then
+            echo "No coverage percentage available, skipping threshold check"
+            exit 0
+          fi
+          # Compare as floating numbers using awk (returns 1 if true)
+          cmp=$(awk "BEGIN {print ($PCT+0) < ($THRESH+0)}")
+          if [ "$cmp" -eq 1 ]; then
+            echo "Coverage $PCT% is below threshold $THRESH%" >&2
+            exit 1
+          else
+            echo "Coverage $PCT% meets threshold $THRESH%"
+          fi
+
+      - name: Upload coverage to Coveralls
+        if: github.ref == 'refs/heads/master'
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./coverage/lcov.info
