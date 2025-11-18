@@ -1,0 +1,79 @@
+name: CI - E2E
+
+on:
+  push: {}
+  pull_request: {}
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      NEXTAUTH_URL: http://localhost:3000
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+
+      - name: Ensure NEXTAUTH_SECRET is set
+        run: |
+          if [ -z "${{ secrets.NEXTAUTH_SECRET }}" ]; then
+            echo 'ERROR: NEXTAUTH_SECRET is not set. Generate one locally with:' >&2
+            echo '  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"' >&2
+            echo 'Then add it as a repository secret (Settings → Secrets → Actions).' >&2
+            echo "See: https://github.com/${{ github.repository }}/blob/main/README.md#github-actions--ci-secrets" >&2
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Set DATABASE_URL
+        run: |
+          # If a secret DATABASE_URL is provided, use it; otherwise fall back to the service URL.
+          if [ -n "${{ secrets.DATABASE_URL }}" ]; then
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          else
+            echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres?schema=public" >> $GITHUB_ENV
+          fi
+
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Build Next.js
+        run: npx next build
+
+      - name: Start Next.js
+        run: |
+          npx next start &
+          npx wait-on http://localhost:3000
+
+      - name: Run Playwright E2E
+        run: npx playwright test --reporter=list
+        env:
+          NEXTAUTH_URL: http://localhost:3000
