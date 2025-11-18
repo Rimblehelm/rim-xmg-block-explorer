@@ -60,23 +60,27 @@ jobs:
           CI: true
 
       - name: Convert coverage-final.json to LCOV
+        id: convert
         run: |
+          set -e
+          converted=false
           if [ -f coverage/coverage-final.json ] && [ ! -f coverage/lcov.info ]; then
             echo 'Converting coverage/coverage-final.json -> coverage/lcov.info'
             node scripts/coverage-to-lcov.js coverage/coverage-final.json coverage/lcov.info || true
-            ls -la coverage || true
-            if [ -f coverage/lcov.info ]; then
-              echo 'Conversion succeeded; head of lcov:'
-              head -n 50 coverage/lcov.info
-            else
-              echo 'No lcov.info after conversion'
-            fi
-          else
-            echo 'No conversion needed'
           fi
+          ls -la coverage || true
+          if [ -f coverage/lcov.info ]; then
+            echo 'Conversion succeeded; head of lcov:'
+            head -n 50 coverage/lcov.info
+            converted=true
+          else
+            echo 'No lcov.info after conversion'
+          fi
+          echo "lcov_exists=$converted" >> $GITHUB_OUTPUT
 
       - name: Upload coverage to Coveralls
+        if: steps.convert.outputs.lcov_exists == 'true'
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./coverage/lcov.info
+          path-to-lcov: coverage/lcov.info

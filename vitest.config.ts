@@ -7,10 +7,10 @@ export default defineConfig({
 		include: ['tests/**/*.test.ts', 'src/**/*.test.ts'],
 		// Run in Node environment for API/unit tests.
 		environment: 'node',
-	},
-	coverage: {
-		provider: 'c8',
-		reporter: ['text', 'lcov'],
-		reportsDirectory: 'coverage',
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'lcov'],
+			reportsDirectory: 'coverage',
+		},
 	},
 })
