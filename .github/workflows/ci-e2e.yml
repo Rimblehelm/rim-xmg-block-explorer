@@ -8,7 +8,6 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     env:
-      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
       NEXTAUTH_URL: http://localhost:3000
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
     services:
@@ -25,14 +24,13 @@ jobs:
 
     steps:
 
-      - name: Ensure NEXTAUTH_SECRET is set
+      - name: Ensure NEXTAUTH_SECRET is set (generate fallback for CI)
         run: |
           if [ -z "${{ secrets.NEXTAUTH_SECRET }}" ]; then
-            echo 'ERROR: NEXTAUTH_SECRET is not set. Generate one locally with:' >&2
-            echo '  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"' >&2
-            echo 'Then add it as a repository secret (Settings → Secrets → Actions).' >&2
-            echo "See: https://github.com/${{ github.repository }}/blob/main/README.md#github-actions--ci-secrets" >&2
-            exit 1
+            echo 'No NEXTAUTH_SECRET provided; generating a temporary secret for CI'
+            node -e "console.log(require('crypto').randomBytes(32).toString('hex'))" | xargs -I{} echo "NEXTAUTH_SECRET={}" >> $GITHUB_ENV
+          else
+            echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> $GITHUB_ENV
           fi
 
       - name: Checkout
