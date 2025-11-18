@@ -72,6 +72,22 @@ jobs:
             echo 'lcov.info not found'
           fi
 
+      - name: Convert coverage-final.json to LCOV
+        run: |
+          if [ -f coverage/coverage-final.json ] && [ ! -f coverage/lcov.info ]; then
+            echo 'Converting coverage/coverage-final.json -> coverage/lcov.info'
+            node scripts/coverage-to-lcov.js coverage/coverage-final.json coverage/lcov.info || true
+            ls -la coverage || true
+            if [ -f coverage/lcov.info ]; then
+              echo 'Conversion succeeded; head of lcov:'
+              head -n 50 coverage/lcov.info
+            else
+              echo 'No lcov.info after conversion'
+            fi
+          else
+            echo 'No conversion needed'
+          fi
+
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
