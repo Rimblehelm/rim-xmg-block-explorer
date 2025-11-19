@@ -21,7 +21,7 @@
   "devDependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
     "@playwright/test": "^1.40.0",
-    "@prisma/client": "^6.19.0",
+    "@prisma/client": "^7.0.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
